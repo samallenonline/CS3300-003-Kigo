@@ -12,7 +12,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://samallenonline.github.io/Kigo-Website2",
+  "homepage": "https://samallenonline.github.io/CS3300-003-Kigo",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
