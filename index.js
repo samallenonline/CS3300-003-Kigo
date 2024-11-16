@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  redirectUri: 'http://localhost:3000/callback' 
+  redirectUri: 'https://kigo-app.herokuapp.com/callback' 
 });
 
 // route to start Spotify authorization
@@ -29,7 +29,14 @@ app.get('/callback', async (req, res) => {
     const data = await spotifyApi.authorizationCodeGrant(code);
     spotifyApi.setAccessToken(data.body['access_token']);
     spotifyApi.setRefreshToken(data.body['refresh_token']);
-    res.send("Successfully authenticated with Spotify!");
+	
+	// get user's spotify profile
+	const userData = await spotifyApi.getMe();
+	const displayName = userData.body.display_name;
+
+	
+	// redirect back to the website with  display name as query parameter
+	res.redirect(`https://samallenonline.github.io/CS3300-003-Kigo?displayName=${encodeURIComponent(displayName)}`);
   } catch (error) {
     console.error("Error during Spotify authentication:", error);
     res.send("Authentication failed.");
