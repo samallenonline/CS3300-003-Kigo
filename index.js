@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  redirectUri: 'https://kigo-app.herokuapp.com/callback' 
+  redirectUri: 'https://kigo-app.glitch.me/login' 
 });
 
 // route to start Spotify authorization
