@@ -1,41 +1,76 @@
-
+/*
+ * Software Engineering Project
+ * ---------------------------------
+ * Class: SyllableCounter1
+ * Purpose:
+ * This class provides a static method, countSyllables, to count the number of syllables
+ * in a given word. The method uses a variety of rules and heuristics, including:
+ * - Identifying vowels, diphthongs (two adjacent vowels), and triphthongs (three adjacent vowels).
+ * - Accounting for edge cases such as silent 'e', special suffixes, and compound words.
+ * - Handling special cases like "zoo", "ion", and words with hyphens.
+ * 
+ * The syllable count is determined by a combination of regex-based filtering,
+ * substring matching for diphthongs and triphthongs, and iterative character analysis.
+ * 
+ * This class is designed to assist in text processing tasks, particularly for poetry,
+ * lyric analysis, and natural language processing.
+ * 
+ * Author: [Your Name]
+ * Date: [Date]
+ * Course: Software Engineering
+ */
 package com.nokelsam.localwave;
 
 //import java.util.regex.Pattern;
 //import java.util.regex.Matcher;
 
 public class SyllableCounter1 {
-
+	/*
+    * Method: countSyllables
+    * ---------------------------------
+    * Counts the number of syllables in a given word based on a combination
+    * of vowel detection, diphthong and triphthong adjustments, and special rules.
+    * 
+    * Parameters:
+    * - word (String): The input word whose syllables are to be counted.
+    * 
+    * Returns:
+    * - int: The calculated syllable count.
+    * 
+    * Key Considerations:
+    * - Words with non-alphabetic characters are cleaned before processing.
+    * - Handles cases like silent 'e', diphthongs, triphthongs, and specific suffixes/prefixes.
+    * - Handles edge cases for words like "zoo", "ion", and hyphenated words.
+    */
 	public static int countSyllables(String word) {
-		// Check if the word is empty/null.
+		// Handle null or empty string cases.
 		if (word == null || word.isEmpty()) {
 			return 0;
 		}
 
+		// Initialize syllable count and track state of vowel detection.
 		int syllableCount = 0;
 		boolean isPreviousVowel = false;
 
-		// Strings to check for the presence of vowels, diphthongs, & triphthongs.
+		// Define constant String arrays for vowel characters, diphthongs, and triphthongs.
 		final String vowels = "aeiouy";
-
-		final String[] diphthongs = { "ai", "ua", "au", "ae", "ay", "ia", "ea", "ee", "ei", "eo", "oa", "oo", "ou", "ie", "ue", "oi", "oy", "io", "iou",
-				  };
+		final String[] diphthongs = { "ai", "ua", "au", "ae", "ay", "ia", "ea", "ee", "ei", "eo", "oa", "oo", "ou", "ie", "ue", "oi", "oy", "io", "iou",				  };
 		final String[] triphthongs = { "iou", "eau", "eae", "eie" };
-
 		final int diphthongsLength = diphthongs.length;
 		final int triphthongsLength = triphthongs.length;
 
+		// Variables for diphthong and triphthong detection.
 		boolean containsDiphthong = false;
 		boolean containsTriphthong = false;
 		
-		// Word may contain multiple diphs/triphthongs
+		// Counters to track multiple diphs/triphthongs per word.
 		int diphCount = 0;
 		int triphCount = 0;
 		
 		boolean isVowel = false;
 		// boolean isPreviousConsonant = false;
 
-		// Convert the string to lowercase for comparisons.
+		// Convert word to lowercase and remove non-alphabetic characters.
 		word = word.toLowerCase().trim();
 		// Get rid of anything that isn't a letter using regex.
 		word = word.replaceAll("[^a-zA-Z]", "");
@@ -97,9 +132,6 @@ public class SyllableCounter1 {
 		    }
 		}
 		
-
-		
-
 		// If the word contains a triphthong (3 adjacent vowels), decrement syllable
 		// count by 2.
 		if (containsTriphthong) {
@@ -114,7 +146,7 @@ public class SyllableCounter1 {
 		}
 
 
-		// ##################################### KINDA WONKY BUT WORKS #######################################\\
+		// ##################################### KINDA WONKY BUT WORKS ####################################### \\
 		// Checks for a silent "e" at the end of word. Note: This check is happening
 		// after initial vowel count, so the syllableCount should be decremented.
 		// Example: "make" or "ale" wwill have a count of 2 syllables, but it's actually 1
@@ -134,8 +166,6 @@ public class SyllableCounter1 {
 			syllableCount++;
 		}
 		
-		/////////////
-
 
 		// Check if the word is longer than 3 characters and the word contains "ved,"
 		// if so, decrement the syllable count. Ex. "caved" is 1 syllable
@@ -143,6 +173,7 @@ public class SyllableCounter1 {
 //
 //			syllableCount--;
 //		}
+		// 
 		if (word.length() > 2 && word.endsWith("ed")) {
 			syllableCount--;
 		}
@@ -153,7 +184,9 @@ public class SyllableCounter1 {
 		if ( word.endsWith("nes")) {
 			syllableCount--;
 		}
-
+		if (word.contains("some")) {
+			syllableCount--;
+		}
 		return syllableCount;
 	} // end main
 } // end syllableCounter
