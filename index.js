@@ -17,12 +17,14 @@ const spotifyApi = new SpotifyWebApi({
 
 // route to start Spotify authorization
 app.get('/login', (req, res) => {
+  console.log("Received request to /login"); // for debugging
   const authorizeURL = spotifyApi.createAuthorizeURL(['user-read-private', 'user-read-email']);
   res.redirect(authorizeURL);
 });
 
 // callback route after authorization
 app.get('/callback', async (req, res) => {
+  console.log("Received request to /callback"); // for debugging
   const code = req.query.code;
 
   try {
