@@ -25,12 +25,13 @@ SPOTIFY_CLIENT_ID=your_client_id
 SPOTIFY_CLIENT_SECRET=your_client_secret
 ```
 
-4. Run the React app
+### Execution and Usage 
+
+1. Run the React app
 
 ```bash npm start```
 
-### Usage 
-React should automatically open your browser and redirect you to a local server. Proceed with authenticating your Spotify account by clicking the buttons on the homepage, and enjoy randomly generated haikus based on your Spotify listening history!
+React should automatically open your browser and redirect you to a local server, finalizing the local setup of the Kigo app. Please reference the user manual if you need more information on navigating the GUI or using certain functionality. 
 
 ### Contributing 
 Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
