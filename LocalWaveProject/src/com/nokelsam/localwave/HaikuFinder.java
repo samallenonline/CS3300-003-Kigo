@@ -60,7 +60,8 @@ public class HaikuFinder {
 					fiveSyllableLineCount++;
 					// System.out.println("Line: " + currentLine + " " + lineCount);
 				}
-			} else if (lineCount == 7) {
+			} 
+			else if (lineCount == 7) {
 				if (!sevenSyllableLines.contains(currentLine)) {
 					sevenSyllableLines.add(currentLine);
 					sevenSyllableLineCount++;
@@ -103,28 +104,42 @@ public class HaikuFinder {
 		
 		System.out.println("\n");
 		System.out.println("~ Haiku ~");
-		String[] haiku = putHaikuTogetherFromArrayLists(fiveSyllableLines, sevenSyllableLines);
+		String[] haiku = putRandomHaikuTogetherFromArrayLists(fiveSyllableLines, sevenSyllableLines);
+		printHaikuStringArray(haiku);
+		
+		haiku = putRandomHaikuTogetherFromArrayLists(fiveSyllableLines, sevenSyllableLines);
+		printHaikuStringArray(haiku);
+		
+		haiku = putRandomHaikuTogetherFromArrayLists(fiveSyllableLines, sevenSyllableLines);
 		printHaikuStringArray(haiku);
 		
 	} // end main
 
 	public static void printHaikuStringArray(String[] haiku) {	
-		System.out.println(haiku[0]);
+		System.out.println("\n" + haiku[0]);
 		System.out.println(haiku[1]);
 		System.out.println(haiku[2]);		
 	} // end printHaikuStringArray
 	
-	public static String[] putHaikuTogetherFromArrayLists(ArrayList<String> five, ArrayList<String> seven){
+	public static String[] putRandomHaikuTogetherFromArrayLists(ArrayList<String> five, ArrayList<String> seven) {
+		
 		String[] haiku = new String[3];
 		
+		int numFiveSyllableLines = five.size();
+		int numSevenSyllableLines = seven.size();
+		
+		int firstRandomFiveLine = (int) (Math.random() * numFiveSyllableLines);
+		int randomSevenLine = (int) (Math.random() * numSevenSyllableLines);
+		int secondRandomFiveLine = (int) (Math.random() * numFiveSyllableLines);
+		
 		if (!five.isEmpty()) {
-			haiku[0] = five.remove(0);
+			haiku[0] = five.get(firstRandomFiveLine);
 		}
 		if (!seven.isEmpty()) {
-			haiku[1] = seven.get(0);
+			haiku[1] = seven.get(randomSevenLine);
 		}
 		if (!five.isEmpty()) {
-			haiku[2] = five.get(0);
+			haiku[2] = five.get(secondRandomFiveLine);
 		}				
 		return haiku;
 	} // end putTogetherHaiku

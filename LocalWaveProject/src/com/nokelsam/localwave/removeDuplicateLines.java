@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.*;
 
-public class processLyricLines {
+public class removeDuplicateLines {
 
 	public static void main(String[] args) throws IOException {
 
@@ -31,7 +31,7 @@ public class processLyricLines {
 
 		printArrayList(nonDuplicateLyricList);
 
-		// Output file.
+		// Output file
 		final String LYRICS_OUT = "non-duplicate-lyrics.txt";
 		FileWriter outWriter = new FileWriter(LYRICS_OUT);
 
