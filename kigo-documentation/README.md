@@ -12,15 +12,11 @@ Kigo is a web app that generates haikus using lyrics from the user's most-listen
 ### Installation
 1. Clone this repository (using bash or GitHub Desktop):
 
-```bash 
-git clone https://github.com/yourusername/CS3300-003-Kigo.git
-```
+```bash git clone https://github.com/yourusername/CS3300-003-Kigo.git```
 
 2. Install dependencies:
 
-```bash
-npm install 
-```
+```bash npm install```
 	
 3. Set up environment variables in a .env file (must be located in the root directory)
 
@@ -31,9 +27,7 @@ SPOTIFY_CLIENT_SECRET=your_client_secret
 
 4. Run the React app
 
-```bash
-npm start
-```
+```bash npm start```
 
 ### Usage 
 React should automatically open your browser and redirect you to a local server. Proceed with authenticating your Spotify account by clicking the buttons on the homepage, and enjoy randomly generated haikus based on your Spotify listening history!
