@@ -1,53 +1,33 @@
 package com.nokelsam.localwave;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class removeDuplicateLines {
 
-	public static void main(String[] args) throws IOException {
+	public static ArrayList<String> main(ArrayList<String> lines) {
 
-		final String TEST_FILE = "blinding-lights-lyrics.txt";
-
-		File file = new File(TEST_FILE);
-		Scanner scanner = new Scanner(file);
-
-		ArrayList<String> fileLyricLinesList = new ArrayList<>();
-
-		// While lines remain
-		while (scanner.hasNextLine()) {
-			// Add entire line to the ArrayList.
-			fileLyricLinesList.add(scanner.nextLine());
-		}
+		ArrayList<String> processedLyricsList = new ArrayList<>();
 
 		// Call sort to make finding repeats easier.
-		Collections.sort(fileLyricLinesList);
+		Collections.sort(processedLyricsList);
 
 		// Remove duplicate lines.
-		ArrayList<String> nonDuplicateLyricList = removeDuplicateLinesFromArrayList(fileLyricLinesList);
-
-		printArrayList(nonDuplicateLyricList);
-
-		// Output file
-		final String LYRICS_OUT = "non-duplicate-lyrics.txt";
-		FileWriter outWriter = new FileWriter(LYRICS_OUT);
+		ArrayList<String> nonDuplicateLyrics = new ArrayList<>();
 
 		// Check if the list is empty
-		if (nonDuplicateLyricList.isEmpty()) {
-			System.out.println("The list is empty.");
+		if (!lines.isEmpty()) {
+			nonDuplicateLyrics = removeDuplicateLinesFromArrayList(lines);
 
-		} else {
-			// Print each string in the list
-			for (String item : nonDuplicateLyricList) {
-				outWriter.write(item + "\n");
-			}
+		}  else {
+			///////-------- ADD CODE TO Send to error log file -------------//////
+			System.out.println("The list is empty.");
 		}
 
-		scanner.close();
-		outWriter.close();
+		// Return the list even if empty.
+		return nonDuplicateLyrics;
 	} // end main
 
 	public static void printArrayList(ArrayList<String> list) {
@@ -63,13 +43,9 @@ public class removeDuplicateLines {
 		}
 	} // end printArrayList<String>
 
-	public static void printArrayListToFile(ArrayList<String> list) {
-
-	} // end printArrayList<String>
-
 	public static ArrayList<String> removeDuplicateLinesFromArrayList(ArrayList<String> list) {
 
-		ArrayList<String> nonDuplicateLyricList = new ArrayList<>();
+		ArrayList<String> nonDuplicatesList = new ArrayList<>();
 
 		// Create iterator to move through lines in ArrayList
 		Iterator<String> iterator = list.iterator();
@@ -79,12 +55,12 @@ public class removeDuplicateLines {
 		while (iterator.hasNext()) {
 			lyric = iterator.next().toString();
 			// If not already in the nonDuploicates list
-			if (!nonDuplicateLyricList.contains(lyric)) {
-				nonDuplicateLyricList.add(lyric);
+			if (!nonDuplicatesList.contains(lyric)) {
+				nonDuplicatesList.add(lyric);
 			}
 		} // end while
 
-		return nonDuplicateLyricList;
+		return nonDuplicatesList;
 	} // end removeDuplicateLinesFromArrayList
 
 } // end processLyricLines class
