@@ -9,16 +9,6 @@ import com.google.gson.JsonParser;
 public class LyricsOvhFetcher {
     private static final String API_URL = "https://api.lyrics.ovh/v1/";
 
-    public static void main(String[] args) {
-        String songTitle = "Star shopping";
-        String artistName = "Lil Peep";
-        try {
-            String lyrics = getLyrics(songTitle, artistName);
-            System.out.println("Lyrics: " + lyrics);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static String getLyrics(String songTitle, String artistName) throws Exception {
         OkHttpClient client = new OkHttpClient();
