@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/samallenonline/CS3300-003-Kigo/static/css/main.b6217935.css",
+    "main.js": "/samallenonline/CS3300-003-Kigo/static/js/main.662e44d1.js",
+    "static/js/453.a7c3230f.chunk.js": "/samallenonline/CS3300-003-Kigo/static/js/453.a7c3230f.chunk.js",
+    "static/media/kigo-background1.png": "/samallenonline/CS3300-003-Kigo/static/media/kigo-background1.0750b9f423ad477bb5f0.png",
+    "static/media/spotify_kigo.png": "/samallenonline/CS3300-003-Kigo/static/media/spotify_kigo.feb25ab22531082d6d68.png",
+    "static/media/kigo-header1.png": "/samallenonline/CS3300-003-Kigo/static/media/kigo-header1.685ce1bc393c0cd81727.png",
+    "static/media/lucida-bsod.ttf": "/samallenonline/CS3300-003-Kigo/static/media/lucida-bsod.74415c2c3c59c9262091.ttf",
+    "static/media/click-noise.wav": "/samallenonline/CS3300-003-Kigo/static/media/click-noise.18a78001595c714dd5ba.wav",
+    "static/media/cursor.cur": "/samallenonline/CS3300-003-Kigo/static/media/cursor.90444ce594ede625e9db.cur",
+    "index.html": "/samallenonline/CS3300-003-Kigo/index.html",
+    "main.b6217935.css.map": "/samallenonline/CS3300-003-Kigo/static/css/main.b6217935.css.map",
+    "main.662e44d1.js.map": "/samallenonline/CS3300-003-Kigo/static/js/main.662e44d1.js.map",
+    "453.a7c3230f.chunk.js.map": "/samallenonline/CS3300-003-Kigo/static/js/453.a7c3230f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b6217935.css",
+    "static/js/main.662e44d1.js"
+  ]
+}
