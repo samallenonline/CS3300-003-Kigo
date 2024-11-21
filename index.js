@@ -1,14 +1,25 @@
+// imports
 const express = require('express');
-const dotenv = require('dotenv'); // contains SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, REDIRECT_URI
+const dotenv = require('dotenv'); // environment variables
 dotenv.config();
 const axios = require('axios'); // for HTTP requests
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
-
+const cors = require('cors'); 
 const app = express();
 const readdir = promisify(fs.readdir);
+
+// allow requests from github pages
+const corsOptions = {
+  origin: process.env.REACT_APP_GITHUB_PAGES_URL || 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+// use CORS middleware
+app.use(cors(corsOptions));
 
 // set port for backend
 const PORT = process.env.PORT || 52000;
@@ -89,10 +100,8 @@ app.get('/callback', async (req, res) => {
     console.log(`[DEBUG] Spotify profile picture URL: ${profilePicture}`);
 
     // redirect back to react app with success status, display name, and profile picture
-    res.redirect(
-      `http://localhost:3000/?success=true&displayName=${encodeURIComponent(displayName)}&profilePicture=${encodeURIComponent(
-        profilePicture || ''
-      )}`
+	res.redirect(
+	  `${FRONTEND_URL}/?success=true&displayName=${encodeURIComponent(displayName)}&profilePicture=${encodeURIComponent(profilePicture || '')}`
     );
   } catch (error) {
     console.error('[DEBUG] Failed to complete Spotify authentication:', error.message);
@@ -229,8 +238,9 @@ app.get('/get-haikus', async (req, res) => {
   }
 });
 
-// report port being used for local testing
+// report port being used
 app.listen(PORT, () => {
-  console.log(`[DEBUG] Server running on http://localhost:${PORT}`);
+  const deployedURL = process.env.REACT_APP_BACKEND_URL || `http://localhost:${PORT}`;
+  console.log(`[DEBUG] Server running at ${deployedURL}`);
 });
 
