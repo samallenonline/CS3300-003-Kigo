@@ -1,0 +1,226 @@
+@font-face {
+  font-family: 'lucida';
+  src: url('/fonts/lucida-bsod.ttf') format('truetype')
+}
+
+body {
+  font-family: 'lucida';
+  background-color: #f4f4f4;
+  background-image: url('/src/visual/kigo-background1.png');
+  background-size: 1440px 820px;
+  background-position: bottom; 
+  background-repeat: no-repeat;
+  cursor: url('.//visual/cursor.cur'), auto; 
+}
+
+.App-header {
+  text-align: center;
+  padding: 20px;
+  background-image: url('/src/visual/kigo-header1.png');
+  background-color: rgba(255, 255, 255, 0.8); 
+  border-bottom: 2px solid #cccccc;
+}
+
+.box-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px;
+  height: 80vh; 
+}
+
+.box {
+  background: linear-gradient(to bottom right, #e6e6e6, #cccccc);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); 
+  text-align: center;
+}
+
+.box h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.box1 {
+  width: 900px;
+  height: 600px;
+  padding: 20px;
+  border: 5px solid white;
+  border-radius: 0px;
+  background-color: #6c87a6; 
+  background: #D7DADF;
+  overflow-y: none;
+  overflow-x: none;
+}
+
+.inner-box {
+  height: 570px;
+  width: 500px;
+  background-color: #DFE3E6;
+  border: 5px solid white; 
+  border-radius: 0px; 
+  padding: 13px;
+  margin-top: 20px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
+
+.spotify-image {
+	width: 150px;
+	margin-top: 15px;
+	margin-bottom: 8px;
+	border-radius: 8px;
+}
+
+.title {
+	text-align: center;
+}
+
+.text-block1,
+.spotify-prompt {
+	text-align: center;
+}
+
+
+.box2 {
+  width: 250px; 
+  height: 600px;
+  padding: 20px;
+  border: 5px solid white;
+  border-radius: 0px;
+  background-color: #6c87a6; 
+  background: #D7DADF;
+  
+  /* for buttons */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.smallbox { /* holds small buttons */
+  font-size: 16px;
+  position: relative; 
+  width: 900px; 
+  height: 30px;
+  margin-top: 3px;
+  /*background-color: white;
+  border: 0px solid white;*/
+  border-radius: 0px;
+  padding: 3px;
+  text-align: left;
+  
+  /* for buttons */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+
+
+.small-button0,
+.small-button1,
+.small-button2 {
+    height: 30px;
+    width: 150px;
+    background-color: white;
+    margin-right: 3px;
+    flex-shrink: 0; 
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+button {
+	font-family: 'lucida';
+	width: 100%;
+	height: auto;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 0px;
+	background-color: #B8C2CB;
+	color: black;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.1s ease;
+}
+
+.haiku-text {
+  font-family: inherit;
+  font-size: inherit;
+  white-space: pre-wrap;
+  margin: 10px 0; 
+  margin-top: 100px;
+}
+
+.generate-another-button {
+	align-items: center;	
+	width: 200px;
+	margin-top: 300px;
+}
+
+.ok-button,
+.connect-spotify-button,
+.generate-haiku-button
+{
+	align-items: center;	
+	width: 200px;
+}
+
+.user-info {
+	margin-top: 20px;
+	
+}
+
+.profile-image {
+    width: 150px; 
+    height: 150px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin-top: 10px; 
+}
+
+.clear-data-button,
+.logout-button {
+	align-items: center;	
+	width: 200px;
+	margin-top: 90px;
+}
+
+.toggle-explicit, 
+.toggle-baby-mode {
+  display: flex; 
+  align-items: center; 
+}
+
+.toggle-explicit input, 
+.toggle-baby-mode input {
+  margin-right: 20px; 
+}
+
+
+.big-button1,
+.big-button2,
+.big-button3
+{
+	height: 70px;
+}
+
+
+button:active {
+	background-color: #444;
+	transition: background-color 0.1s ease;
+}
+
+
+@media (max-width: 768px) {
+  .box-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .box {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
