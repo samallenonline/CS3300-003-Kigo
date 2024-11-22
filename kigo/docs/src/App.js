@@ -18,6 +18,9 @@ function App() {
   const [profileImage, setProfileImage] = useState(''); // state to store spotify profile image 
   const [currentHaiku, setCurrentHaiku] = useState(null); // state to store current haiku to be displayed
   
+  //const BACKEND_URL = 'https://kigo-app.glitch.me';
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:52000';
+  
   // get stored data from user 
   useEffect(() => {	
 	const savedPreference = localStorage.getItem('allowExplicitContent');
@@ -69,21 +72,22 @@ function App() {
   
   // handles button for user to clear their local data
   const handleClearData = () => {
-    localStorage.clear(); 
-    setStep(0); 
+	playClickSound();
+    localStorage.clear();  
 	setAllowExplicitContent(false);
     setShowWelcomeText(true);
+	setStep(0);
     alert("All local data has been cleared!");
   };
   
   // function for when user clicks on the "ok" button
   const handleOkClick = () => {
   	playClickSound();
-    setStep(1); // show spotify prompt
 	// clear other pages 
     setShowWelcomeText(false); 
     setShowContactInfo(false);
 	setShowHome(false);
+	setStep(1); // show spotify prompt
 	if (isSpotifyConnected){
 		setStep(2);
 	}
@@ -91,29 +95,28 @@ function App() {
   
   // function for when user clicks on the "connect spotify" button
   const handleConnectSpotifyClick = () => {
-	setStep(2);
-	setShowWelcomeText(false);
-	setDisplayName(displayName);
-	setIsSpotifyConnected(true);
-	
 	playClickSound();
+	setDisplayName(displayName);
+	// clear other pages 
+	setShowWelcomeText(false);
 	setIsSpotifyConnected(true);
-	window.location.href = 'https://kigo-app.glitch.me/login'; // redirect to /login route
+	setIsSpotifyConnected(true);
+	setStep(2);
+	window.location.href = `${BACKEND_URL}/login`; // redirect to /login route
   };
 
   // function for when the user clicks on the "generate haiku" button
   const handleGenerateHaikuClick = async () => {
     playClickSound();
-
     // for debugging 
     try {
-    const response = await fetch('https://kigo-app.glitch.me/generate-haiku');
+    const response = await fetch(`${BACKEND_URL}/generate-haiku`);
       if (response.ok) {
         const data = await response.json(); // parse the JSON response
         if (data.success) {
           console.log(data.message);
-		  await handleFetchAndDisplayHaiku();
-		  setStep(3);
+		  await handleFetchAndDisplayHaiku(); // wait till haikus are fetched before changing step
+		  setStep(3); // change to haiku display page 
         } else {
           console.error(`Backend error: ${data.message}`);
         }
@@ -127,30 +130,39 @@ function App() {
   
   // function to fetch haikus from backend to be displayed
   const handleFetchAndDisplayHaiku = async () => {
-    try {
-      const response = await fetch('https://kigo-app.glitch.me/get-haikus');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          const haikusArray = Object.values(data.haikus); // convert haikus object to an array
-          if (haikusArray.length > 0) {
-            // select a random haiku from the array
-            const randomHaiku = haikusArray[Math.floor(Math.random() * haikusArray.length)];
-            setCurrentHaiku(randomHaiku);
+      try {
+          const response = await fetch(`${BACKEND_URL}/get-haikus`);
+          if (response.ok) {
+              const data = await response.json();
+              if (data.success) {
+                  const haikusArray = Object.values(data.haikus); // convert haiku object to an array
+                  if (haikusArray.length > 0) {
+                      // select a random haiku from the array
+                      const randomHaiku = haikusArray[Math.floor(Math.random() * haikusArray.length)];
+                      
+                      // check if `randomHaiku` is a string or an object
+                      if (typeof randomHaiku === 'string') {
+                          setCurrentHaiku(randomHaiku); // if string, use it directly
+                      } else if (randomHaiku.content) {
+                          setCurrentHaiku(randomHaiku.content); // use `content` property if it's an object
+                      } else {
+                          console.error('Invalid haiku format:', randomHaiku);
+                          alert('Error: Invalid haiku format.');
+                      }
+                  } else {
+                      alert('No haikus available. Generate haikus first!');
+                  }
+              } else {
+                  alert('Failed to fetch haikus.');
+              }
           } else {
-            alert('No haikus available. Generate haikus first!');
+              alert('Error connecting to the backend.');
           }
-        } else {
-          alert('Failed to fetch haikus.');
-        }
-      } else {
-        alert('Error connecting to the backend.');
+      } catch (error) {
+          console.error('Error fetching haikus:', error);
+          alert('Error connecting to the backend.');
       }
-    } catch (error) {
-      console.error('Error fetching haikus:', error);
-      alert('Error connecting to the backend.');
-    }
-  };
+  };	 
 
   // function for when the user logs out of their account 
   const handleLogout = () => {
@@ -163,12 +175,12 @@ function App() {
   // function for when the user clicks on the "about" button
   const handleAboutClick = () => {
 	playClickSound();
-	setStep(0); 
 	// show about page, hide others 
 	setShowAbout(true);
     setShowWelcomeText(false);
 	setShowAccount(false);
 	setShowContactInfo(false);
+	setStep(0);
   };
   
   // function for when the user clicks on the "contact" button

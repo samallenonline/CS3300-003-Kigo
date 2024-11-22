@@ -1,17 +1,28 @@
+// imports
 const express = require('express');
-const dotenv = require('dotenv'); // contains SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, REDIRECT_URI
-dotenv.config();
-const axios = require('axios'); // for HTTP requests
+const dotenv = require('dotenv'); // environment variables
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
-
-const app = express();
+const cors = require('cors'); // to ensure communication with github pages 
 const readdir = promisify(fs.readdir);
+
+dotenv.config();
+const app = express();
 
 // set port for backend
 const PORT = process.env.PORT || 52000;
+
+// allow requests from github pages
+const corsOptions = {
+  origin: process.env.REACT_APP_GITHUB_PAGES_URL || 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+// use CORS middleware
+app.use(cors(corsOptions));
 
 // define paths
 const jarPathNoah = path.join(__dirname, 'libs', 'kigonoah-0.0.1-SNAPSHOT.jar');
@@ -19,218 +30,230 @@ const jarPathKelly = path.join(__dirname, 'libs', 'kigokelly-0.0.1-SNAPSHOT.jar'
 const lyricsFolder = path.join(__dirname, '../kigonoah/lyrics');
 const haikuFolder = path.join(__dirname, '../kigokelly/haikus');
 
-// check if haiku output folder exists
+// check if output folders exist
+if (!fs.existsSync(lyricsFolder)) {
+  fs.mkdirSync(lyricsFolder);
+}
 if (!fs.existsSync(haikuFolder)) {
   fs.mkdirSync(haikuFolder);
 }
 
-// get frontend URL from .env, default to port 3000 if not available 
-const FRONTEND_URL = process.env.REACT_APP_GITHUB_PAGES_URL || 'http://localhost:3000';
+// get frontend URL from .env, default to port 3000 if not available
+const FRONTEND_URL = 'http://localhost:3000';
 
 // root route
 app.get('/', (req, res) => {
   res.send('Welcome to the Kigo Node.js app!');
 });
 
-// route to start spotify authorization
+// route to start Spotify authorization
 app.get('/login', (req, res) => {
-  const authorizeURL = `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REDIRECT_URI}&scope=user-top-read`;
-  console.log(`[DEBUG] Redirecting user to: ${authorizeURL}`);
-  res.redirect(authorizeURL);
+
+  // run JAR file kigonoah-0.0.1-SNAPSHOT.jar (noah's code)
+  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'login']);
+  let output = ''; // variable to store standard output
+  
+  // listener for standard output 
+  jarProcess.stdout.on('data', (data) => {
+    output += data.toString(); // append data to output variable 
+  });
+
+  // listener for standard error
+  jarProcess.stderr.on('data', (data) => {
+    console.error(`[DEBUG] JAR STDERR: ${data}`); // log errors
+  });
+
+  // listener for when JAR process closes
+  jarProcess.on('close', (code) => {
+	// error detected 
+    if (code !== 0) {
+      console.error(`[DEBUG] JAR exited with code ${code}`);
+      res.status(500).send('Failed to generate authorization URI.');
+    } else {
+	  // no errors
+      console.log(`[DEBUG] Authorization URI: ${output.trim()}`);
+      res.redirect(output.trim()); // redirect the user to the generated URI
+    }
+  });
 });
 
-// callback route after spotify redirects back with the code
+// callback route after Spotify redirects back with the code
 app.get('/callback', async (req, res) => {
   const { code } = req.query;
 
-  // if authorization code is missing
+  // no authorization code returned
   if (!code) {
     console.error('[DEBUG] Missing authorization code');
     return res.redirect(`${FRONTEND_URL}/?success=false`);
   }
 
-  // print authorization code
   console.log(`[DEBUG] Received authorization code: ${code}`);
 
-  try {
-    // exchange authorization code for access token
-    const response = await axios.post('https://accounts.spotify.com/api/token', null, {
-      params: {
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: process.env.REDIRECT_URI,
-        client_id: process.env.SPOTIFY_CLIENT_ID,
-        client_secret: process.env.SPOTIFY_CLIENT_SECRET,
-      },
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+  // run JAR file kigonoah-0.0.1-SNAPSHOT.jar with authorization code
+  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'callback', code]);
 
-	// access token successfully obtained
-    const { access_token } = response.data;
-    console.log(`[DEBUG] Access token received: ${access_token}`);
+  let output = ''; // variable to store standard output
+  let error = ''; // variable to store errors
 
-    // fetch spotify user's profile to get display name and profile picture
-    const profileResponse = await axios.get('https://api.spotify.com/v1/me', {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-
-    const displayName = profileResponse.data.display_name;
-    const profilePicture =
-      profileResponse.data.images && profileResponse.data.images.length > 0
-        ? profileResponse.data.images[0].url
-        : null;
-
-	// for debugging 
-    console.log(`[DEBUG] Spotify account name: ${displayName}`);
-    console.log(`[DEBUG] Spotify profile picture URL: ${profilePicture}`);
-
-    // redirect back to react app with success status, display name, and profile picture
-    res.redirect(
-      `http://localhost:3000/?success=true&displayName=${encodeURIComponent(displayName)}&profilePicture=${encodeURIComponent(
-        profilePicture || ''
-      )}`
-    );
-  } catch (error) {
-    console.error('[DEBUG] Failed to complete Spotify authentication:', error.message);
-    res.redirect(`${FRONTEND_URL}/?success=false`);
-  }
-});
-
-// route to fetch lyrics using kigonoah-0.0.1-SNAPSHOT.jar (jar file for noah's code)
-app.get('/fetch-lyrics', (req, res) => {
-  const { songTitle, artistName } = req.query;
-
-  // checks if song title or artist name is missing
-  if (!songTitle || !artistName) {
-    console.error(`[DEBUG] Missing query parameters: songTitle=${songTitle}, artistName=${artistName}`);
-    return res.status(400).send('Missing songTitle or artistName query parameters.');
-  }
-  
-  // for debugging
-  console.log(`[DEBUG] Fetching lyrics for Song: ${songTitle}, Artist: ${artistName}`);
-
-  // manage JAR process 
-  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'lyrics', songTitle, artistName]);
-  let output = '';
-  let error = '';
-
+  // listener for standard output
   jarProcess.stdout.on('data', (data) => {
-    console.log(`[DEBUG] JAR STDOUT: ${data}`);
     output += data.toString();
   });
 
+  // listener for standard error 
   jarProcess.stderr.on('data', (data) => {
-    console.error(`[DEBUG] JAR STDERR: ${data}`);
     error += data.toString();
   });
 
+  // listener for when JAR process closes
+  jarProcess.on('close', (code) => {
+    if (code !== 0) {
+      console.error(`[DEBUG] JAR exited with code ${code}`);
+      console.error(`[DEBUG] JAR STDERR: ${error.trim()}`);
+      return res.redirect(`${FRONTEND_URL}/?success=false`);
+    }
+
+    console.log(`[DEBUG] JAR Output: ${output.trim()}`);
+
+    // parse output to extract access token, display name, and profile picture
+    const accessToken = output.match(/ACCESS_TOKEN:(.*)/)?.[1]?.trim();
+    const displayName = output.match(/DISPLAY_NAME:(.*)/)?.[1]?.trim();
+    const profilePicture = output.match(/PROFILE_PICTURE:(.*)/)?.[1]?.trim();
+
+	// if missing access token or displauy name 
+    if (!accessToken || !displayName) {
+      console.error('[DEBUG] Missing access token or display name in JAR output');
+      return res.redirect(`${FRONTEND_URL}/?success=false`);
+    }
+
+	// for debugging
+    console.log(`[DEBUG] Access Token: ${accessToken}`);
+    console.log(`[DEBUG] Display Name: ${displayName}`);
+    console.log(`[DEBUG] Profile Picture: ${profilePicture}`);
+
+    // redirect back to front end with information extracted
+    res.redirect(
+      `${FRONTEND_URL}/?success=true&displayName=${encodeURIComponent(displayName)}&profilePicture=${encodeURIComponent(profilePicture || '')}`
+    );
+  });
+});
+
+// route to fetch lyrics using JAR file kigonoah-0.0.1-SNAPSHOT.jar (noah's code)
+app.get('/fetch-lyrics', (req, res) => {
+  const { accessToken } = req.query;
+
+  // check if access token was returned 
+  if (!accessToken) {
+    console.error('[DEBUG] Missing access token');
+    return res.status(400).send('Access token is required.');
+  }
+
+  // run JAR file kigonoah-0.0.1-SNAPSHOT.jar with access token 
+  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'lyrics', accessToken]);
+
+  // listener for standard output
+  jarProcess.stdout.on('data', (data) => {
+    console.log(`[DEBUG] JAR STDOUT: ${data}`);
+  });
+
+  // listener for standard error
+  jarProcess.stderr.on('data', (data) => {
+    console.error(`[DEBUG] JAR STDERR: ${data}`);
+  });
+
+  // listener for when the JAR process closes
   jarProcess.on('close', (code) => {
     if (code !== 0) {
       console.error(`[DEBUG] JAR exited with code ${code}`);
       res.status(500).send('Failed to fetch lyrics.');
     } else {
-      console.log(`[DEBUG] Lyrics fetched: ${output.trim()}`);
-      res.send(output.trim());
+      res.send('Lyrics fetched and saved successfully.');
     }
   });
 });
 
-// route to generate haikus using kigokelly-0.0.1-SNAPSHOT.jar (jar file for kelly's code)
-app.get('/generate-haiku', async (req, res) => {
-  console.log(`[DEBUG] Generating haikus from lyrics folder: ${lyricsFolder}`);
 
-  // checks /lyric folder for presence of .txt files 
+// route to generate haikus using JAR file kigokelly-0.0.1-SNAPSHOT.jar 
+app.get('/generate-haiku', async (req, res) => {
+	
   try {
+	// for debugging
+	console.log(`[DEBUG] Checking contents of lyrics folder: ${lyricsFolder}`);
     const files = await readdir(lyricsFolder);
+	console.log(`[DEBUG] Found files: ${files}`);
     const lyricFiles = files.filter((file) => file.endsWith('.txt'));
 
+	// check if files exist in the /lyrics folder 
     if (lyricFiles.length === 0) {
-      console.log('[DEBUG] No lyric files found in the lyrics folder.');
-      return res.status(200).json({ success: false, message: 'No lyric files found to process.' });
+      console.log('[DEBUG] No lyric files found.');
+      return res.status(400).send('No lyric files found to process.');
     }
 
-    let haikusGenerated = [];
-
-	// manage JAR process
     for (const file of lyricFiles) {
-      const inputFilePath = path.join(lyricsFolder, file);
+      const filePath = path.join(lyricsFolder, file);
 
-      console.log(`[DEBUG] Processing lyric file: ${file}`);
+	  // run JAR file kigokelly-0.0.1-SNAPSHOT.jar 
+      const jarProcess = spawn('java', ['-jar', jarPathKelly, filePath]);
 
-      const jarProcess = spawn('java', ['-jar', jarPathKelly, inputFilePath], {
-        cwd: path.resolve(__dirname, '../kigokelly'),
-      });
-
-      let output = '';
-      let error = '';
-
+	  // listener for standard output
       jarProcess.stdout.on('data', (data) => {
-        output += data.toString();
+        console.log(`[DEBUG] Generating haiku: ${data.toString()}`);
       });
 
+	  // listener for standard error 
       jarProcess.stderr.on('data', (data) => {
-        error += data.toString();
+        console.error(`[DEBUG] Error in /generate-haiku: ${data.toString()}`);
       });
 
       await new Promise((resolve, reject) => {
         jarProcess.on('close', (code) => {
-          if (code !== 0) {
-            console.error(`[DEBUG] JAR exited with code ${code} for file: ${file}`);
-            console.error(`[DEBUG] JAR STDERR: ${error.trim()}`);
-            reject(new Error(`Failed to generate haiku for ${file}`));
-          } else {
-            console.log(`[DEBUG] Haiku generated for ${file}:\n${output.trim()}`);
-            haikusGenerated.push({ file, haiku: output.trim() });
+          if (code === 0) {
             resolve();
+          } else {
+            reject(new Error(`Error generating haiku for file: ${file}`));
           }
         });
       });
     }
 
-	// for debugging - reports haiku generation success status 
-    console.log(`[DEBUG] Haikus generated: ${haikusGenerated.length}`);
-    return res.status(200).json({ success: true, message: `Haikus successfully generated for ${haikusGenerated.length} files!` });
+    res.send({ success: true, message: 'Haikus generated successfully.' });
   } catch (err) {
-    console.error('[DEBUG] Error generating haikus:', err.message);
-    return res.status(500).json({ success: false, message: 'Error occurred while generating haikus.' });
+    console.error(`[DEBUG] Error in /generate-haiku: ${err.message}`);
+    res.status(500).send('Error generating haikus.');
   }
 });
 
 // route to fetch haikus
 app.get('/get-haikus', async (req, res) => {
-  try {
-    // read all files in the /haikus folder
-    const files = await readdir(haikuFolder);
-    const haikus = {};
+    try {
+        // read all files in the /haikus folder
+        const files = await readdir(haikuFolder);
+        const haikus = {};
 
-    for (const file of files) {
-      const filePath = path.join(haikuFolder, file);
-      const content = fs.readFileSync(filePath, 'utf8');
+        for (const file of files) {
+            const filePath = path.join(haikuFolder, file);
+            const content = fs.readFileSync(filePath, 'utf8');
 
-      // extract the first three lines from the file (may change this, each txt file has 3 haikus)
-      const lines = content.split('\n').filter(line => line.trim() !== '');
-      const haiku = lines.slice(0, 3).join('\n'); // get first 3 lines
+            // extract first three lines from the file (there are 3 haikus in each file)
+            const lines = content.split('\n').filter(line => line.trim() !== '');
+            const haiku = lines.slice(0, 3).join('\n'); // get  first 3 lines
 
-      if (haiku) {
-        haikus[file] = haiku;
-      }
+            if (haiku) {
+                haikus[file] = { file, content: haiku }; // create an object with file and content
+            }
+        }
+
+        // return the haikus
+        console.log(`[DEBUG] Fetched haikus: ${Object.keys(haikus).length} files`);
+        res.json({ success: true, haikus });
+    } catch (error) {
+        console.error('[DEBUG] Error reading haikus:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch haikus.' });
     }
-
-	// for debugging - reports haiku fetch success status
-    console.log(`[DEBUG] Fetched haikus: ${Object.keys(haikus).length} files`);
-    res.json({ success: true, haikus });
-  } catch (error) {
-    console.error('[DEBUG] Error reading haikus:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch haikus.' });
-  }
 });
 
-// report port being used for local testing
+
+// start the server
 app.listen(PORT, () => {
   console.log(`[DEBUG] Server running on http://localhost:${PORT}`);
 });
-

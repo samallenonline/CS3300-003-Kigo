@@ -11,8 +11,8 @@ import java.net.URI;
 public class AuthorizationCode {
     private static final String clientId = System.getenv("SPOTIFY_CLIENT_ID");
     private static final String clientSecret = System.getenv("SPOTIFY_CLIENT_SECRET");
-    private static final URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:3000/callback");
-
+    private static final URI redirectUri = SpotifyHttpManager.makeUri(System.getenv("REDIRECT_URI"));
+    
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
         .setClientId(clientId)
         .setClientSecret(clientSecret)
@@ -28,7 +28,7 @@ public class AuthorizationCode {
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             return accessToken;
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
+        	System.err.println("Error retrieving access token: " + e.getMessage());
             e.printStackTrace(); // for further debugging
             return null;
         }
