@@ -11,13 +11,22 @@ const readdir = promisify(fs.readdir);
 dotenv.config();
 const app = express();
 
-// check PATH variable used by node.js process
-spawn('java -version', (err, stdout, stderr) => {
-  if (err) {
-    console.log(`Error: ${stderr}`);
-  } else {
-    console.log(`Java version: ${stdout}`);
+// check java version 
+const javaVersion = spawn('java', ['-version']);
+
+javaVersion.stdout.on('data', (data) => {
+  console.log(`Java version: ${data}`);
+});
+
+javaVersion.stderr.on('data', (data) => {
+  console.log(`Error: ${data}`);
+});
+
+javaVersion.on('close', (code) => {
+  if (code !== 0) {
+    console.log(`Java process exited with code ${code}`);
   }
+});
 
 // set port for backend
 const PORT = process.env.PORT || 10000;
