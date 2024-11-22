@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 // set port for backend
-const PORT = process.env.PORT || 52000;
+const PORT = process.env.PORT || 10000;
 
 // allow requests from github pages
 const corsOptions = {
@@ -254,6 +254,6 @@ app.get('/get-haikus', async (req, res) => {
 
 
 // start the server
-app.listen(PORT, () => {
-  console.log(`[DEBUG] Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
