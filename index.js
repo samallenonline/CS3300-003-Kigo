@@ -27,8 +27,8 @@ app.use(cors(corsOptions));
 // define paths
 const jarPathNoah = path.join(__dirname, 'libs', 'kigonoah-0.0.1-SNAPSHOT.jar');
 const jarPathKelly = path.join(__dirname, 'libs', 'kigokelly-0.0.1-SNAPSHOT.jar');
-const lyricsFolder = path.join(__dirname, '../kigonoah/lyrics');
-const haikuFolder = path.join(__dirname, '../kigokelly/haikus');
+const lyricsFolder = path.join(__dirname, 'kigonoah', 'lyrics');
+const haikuFolder = path.join(__dirname, 'kigokelly', 'haikus');
 
 // check if output folders exist
 if (!fs.existsSync(lyricsFolder)) {
