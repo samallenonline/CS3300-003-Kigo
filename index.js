@@ -11,6 +11,9 @@ const readdir = promisify(fs.readdir);
 dotenv.config();
 const app = express();
 
+// check PATH variable used by node.js process
+console.log(process.env.PATH);
+
 // set port for backend
 const PORT = process.env.PORT || 10000;
 
@@ -50,7 +53,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
 
   // run JAR file kigonoah-0.0.1-SNAPSHOT.jar (noah's code)
-  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'login']);
+  const jarProcess = spawn('/opt/homebrew/bin/java', ['-jar', jarPathNoah, 'login']);
   let output = ''; // variable to store standard output
   
   // listener for standard output 
@@ -90,7 +93,7 @@ app.get('/callback', async (req, res) => {
   console.log(`[DEBUG] Received authorization code: ${code}`);
 
   // run JAR file kigonoah-0.0.1-SNAPSHOT.jar with authorization code
-  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'callback', code]);
+  const jarProcess = spawn('/opt/homebrew/bin/java', ['-jar', jarPathNoah, 'callback', code]);
 
   let output = ''; // variable to store standard output
   let error = ''; // variable to store errors
@@ -149,7 +152,7 @@ app.get('/fetch-lyrics', (req, res) => {
   }
 
   // run JAR file kigonoah-0.0.1-SNAPSHOT.jar with access token 
-  const jarProcess = spawn('java', ['-jar', jarPathNoah, 'lyrics', accessToken]);
+  const jarProcess = spawn('/opt/homebrew/bin/java', ['-jar', jarPathNoah, 'lyrics', accessToken]);
 
   // listener for standard output
   jarProcess.stdout.on('data', (data) => {
@@ -193,7 +196,7 @@ app.get('/generate-haiku', async (req, res) => {
       const filePath = path.join(lyricsFolder, file);
 
 	  // run JAR file kigokelly-0.0.1-SNAPSHOT.jar 
-      const jarProcess = spawn('java', ['-jar', jarPathKelly, filePath]);
+      const jarProcess = spawn('/opt/homebrew/bin/java', ['-jar', jarPathKelly, filePath]);
 
 	  // listener for standard output
       jarProcess.stdout.on('data', (data) => {
