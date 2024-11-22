@@ -12,7 +12,12 @@ dotenv.config();
 const app = express();
 
 // check PATH variable used by node.js process
-console.log(process.env.PATH);
+spawn('java -version', (err, stdout, stderr) => {
+  if (err) {
+    console.log(`Error: ${stderr}`);
+  } else {
+    console.log(`Java version: ${stdout}`);
+  }
 
 // set port for backend
 const PORT = process.env.PORT || 10000;
