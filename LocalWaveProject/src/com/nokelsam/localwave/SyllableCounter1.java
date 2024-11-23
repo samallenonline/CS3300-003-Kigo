@@ -159,10 +159,19 @@ public class SyllableCounter1 {
 			syllableCount++;
 		}
 		// Case: "zooplankton" or "zoophobia"
-		if (word.startsWith("zoo") && !word.endsWith("zoo")) {
+		if (word.startsWith("zoo")  ) {
 			syllableCount++;
 		}
 		if ( word.endsWith("ia") || word.endsWith("ias")) {
+			syllableCount++;
+		}
+		if ( word.endsWith("ian")) {
+			syllableCount++;
+		}
+		if ( word.startsWith("trades") && word.length() > 6) {
+			syllableCount++;
+		}
+		if ( word.contains("phobia")) {
 			syllableCount++;
 		}
 		

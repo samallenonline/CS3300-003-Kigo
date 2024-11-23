@@ -7,9 +7,9 @@ import java.util.Scanner;
 import java.util.Iterator;
 
 public class HaikuFinder {
-
+	
 	public static void main(String[] args) throws IOException {
-
+		
 		// Check if a file name was provided as an argument.
 		if (args.length != 1) {
 			System.out.println("Usage: java HaikuFinder <lyrics-file.txt>");

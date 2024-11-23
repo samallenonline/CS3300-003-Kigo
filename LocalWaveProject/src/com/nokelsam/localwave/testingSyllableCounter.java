@@ -38,11 +38,8 @@ public class testingSyllableCounter {
 	public static void main(String[] args) throws IOException {
 
 		// Set up test input files.
-		// final String TEST_FILE = "joji-your-man_lryics.txt";
-		// final String TEST_FILE = "rap-god-polished.txt";
-		// final String TEST_FILE = "1000_words_source.txt";
-		//final String TEST_FILE = "car-radio-lyrics.txt";
-		final String TEST_FILE = "blinding-lights-lyrics.txt";
+		final String TEST_FILE = "all-words-69k.txt";
+
 		
 		File testFile = new File(TEST_FILE);
 		Scanner fileReader = new Scanner(testFile);
@@ -107,7 +104,7 @@ public class testingSyllableCounter {
 		// final String COMPARE_FILE = "rap-god-syllables.txt";
 		
 		// Reference file with correct syllable counts //
-		final String COMPARE_FILE = "blinding-lights-syllables.txt";
+		final String COMPARE_FILE = "correctSyllables.txt";
 		// final String COMPARE_FILE = "1000-correct-syllables.txt";
 		
 

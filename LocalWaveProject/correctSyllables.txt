@@ -3,12 +3,10 @@
 1 a-ok 
 2 aardvark 
 2 aardwolf 
-1 ab 
 2 aba 
 3 abaca 
 3 abacist 
 2 aback 
-4 abactinal 
 3 abacus 
 3 abaddon 
 2 abaft 
@@ -49,7 +47,6 @@
 5 abbreviated 
 5 abbreviation 
 5 abbreviature 
-1 abc 
 3 abcoulomb 
 2 abdal 
 3 abderite 
@@ -346,7 +343,7 @@
 2 abyss 
 3 abyssal 
 5 abyssinian 
-1 ac 
+2 a.c.
 3 acacia 
 5 academia 
 4 academic 
@@ -62542,12 +62539,8 @@
 2 tiu 
 3 tivoli 
 2 tizzy 
-1 tj 
-1 tk 
-1 tl 
 2 tlingit 
 2 tmesis 
-1 tnt 
 1 to 
 1 toad 
 4 toad-in-the-hole 
@@ -62567,7 +62560,6 @@
 3 tobago 
 5 tobagonian 
 4 tobbaconist 
-1 tobe 
 3 toboggan 
 4 tobogganing 
 4 tobogganist 
@@ -62578,7 +62570,6 @@
 4 tocology 
 2 tocsin 
 1 tod 
-2 toda 
 2 today 
 2 toddle 
 2 toddler 
@@ -62968,7 +62959,6 @@
 1 toy 
 2 toyon 
 2 toyshop 
-1 tr 
 2 tra-la 
 4 trabeated 
 4 tracasserie 
@@ -63522,7 +63512,6 @@
 4 trigrammatic 
 3 trigrammic 
 2 trigraph 
-4 trikumia/ 
 4 trilateral 
 3 trilingual 
 3 trilisa 
@@ -69577,7 +69566,6 @@
 1 ye 
 1 yea 
 1 yeah 
-1 yean 
 1 year 
 2 year-end 
 2 year-round 
@@ -69623,7 +69611,6 @@
 2 yeomen 
 1 yep 
 1 yerk 
-4 yerupaja 
 1 yes 
 3 yesterday 
 3 yesterdays 
@@ -69652,7 +69639,6 @@
 1 yoicks 
 1 yoke 
 2 yokel 
-3 yokel-like 
 3 yokemate 
 2 yokuts 
 1 yolk 
@@ -69666,7 +69652,6 @@
 4 yosemite 
 1 you 
 1 young 
-5 young-begetting 
 2 younger 
 2 youngish 
 2 youngness 
@@ -69684,14 +69669,11 @@
 1 yow 
 1 yowl 
 2 ypres 
-4 ytterbium 
 3 yttrium 
 2 yuan 
 3 yucatan 
-3 yucatec 
 2 yucca 
 1 yuck 
-1 yue 
 3 yugoslav 
 5 yugoslavia 
 5 yugoslavian 
@@ -69705,47 +69687,8 @@
 1 yup 
 2 yuppie 
 1 yurt 
-1 z 
-2 z-axis 
-1 za 
-1 zaar 
-4 zabaglione 
-2 zadkiel 
-2 zaffer 
-3 zaglossus 
-2 zagreb 
-2 zaire 
-4 zairean 
-2 zairese 
-3 zalophus 
-2 zama 
-3 zambezi 
-3 zambia 
-3 zambian 
-2 zambo 
-3 zambomba 
-3 zamia 
-5 zamiaceae 
-2 zamiel 
-5 zannichellia 
-7 zannichelliaceae 
-5 zantedeschia 
-4 zanthoxylum 
 2 zany 
-3 zanzibar 
-3 zaofulvin 
 1 zap 
-4 zapodidae 
-1 zapus 
-4 zaragoza 
-1 zarf 
-2 zarpall 
-2 zayin 
-1 zb 
-1 zc 
-1 zd 
-1 ze 
-2 zea 
 1 zeal 
 2 zealand 
 3 zealander 
@@ -69755,20 +69698,7 @@
 3 zealously 
 2 zebra 
 3 zebrawood 
-2 zebrule 
-2 zebu 
-1 zee 
-2 zeidae 
-2 zeitgeist 
-2 zembla 
-3 zemindar 
-4 zemindary 
 1 zen 
-4 zenaidura 
-3 zenana 
-3 zendavest 
-2 zenith 
-3 zenithal 
 2 zeno 
 3 zeomorphi 
 2 zephyr 
@@ -69776,37 +69706,20 @@
 3 zeppelin 
 2 zero 
 2 zero 
-3 zerronnen 
 1 zest 
 2 zestful 
 3 zestfully 
 2 zeta 
-3 zetetic 
-2 zeugma 
 1 zeus 
-1 zhuang 
-1 zieht 
-4 zigadenus 
 2 zigzag 
 1 zilch 
 1 zill 
 2 zillion 
 3 zimbabwe 
-3 zimbabwean 
 3 zimmermann 
 1 zinc 
-3 zincograph 
-4 zincography 
 3 zinfandel 
-1 zing 
-3 zingano 
-3 zingaro 
-3 zingiber 
-6 zingiberaceae 
-4 zinjanthropus 
-3 zinkenite 
-3 zinnia 
-3 zinnwaldite 
+1 zing  
 2 zion 
 3 zionism 
 3 zionist 
@@ -69816,23 +69729,11 @@
 2 zippo 
 2 zircon 
 4 zirconium 
-2 zither 
-2 ziti 
-4 zizania 
-3 ziziphus 
-2 zloty 
-4 zoanthropy 
-2 zoarces 
-3 zoarcidae 
-1 zocle 
 3 zodiac 
 4 zodiacal 
 2 zoetic 
-1 zoic 
 2 zoilus 
 2 zola 
-3 zolaesque 
-3 zollverein 
 2 zomba 
 2 zombi 
 2 zombie 
@@ -69844,19 +69745,9 @@
 1 zonk 
 5 zonotrichia 
 1 zoo 
-4 zoogloea 
-3 zoogloeic 
-3 zoogloeoid 
-4 zoography 
-5 zoohygiantics 
-2 zooid 
-4 zoolatry 
-5 zoological 
 4 zoologist 
 4 zoology 
 1 zoom 
-5 zoomastigina 
-4 zoomastigote 
 3 zoonomy 
 4 zoonosis 
 5 zoophobia 
@@ -69864,58 +69755,12 @@
 3 zoophyte 
 4 zooplankton 
 3 zoospore 
-3 zoothapsis 
-4 zootomy 
-2 zoril 
-4 zoroaster 
-5 zoroastrian 
-6 zoroastrianism 
-3 zostera 
-5 zosteraceae 
-2 zouave 
-1 zounds 
-3 zoysia 
-1 zu 
 3 zucchini 
 2 zulu 
 2 zurich 
-4 zweierleiger 
-2 zwieback 
-2 zwischen 
-3 zygnema 
-6 zygnemataceae 
-4 zygnematales 
-4 zygocactus 
-4 zygodactyl 
-3 zygoma 
-4 zygomorphic 
-5 zygomycetes 
-5 zygomycota 
-6 zygophyllaceae 
-4 zygophyllum 
-4 zygoptera 
 2 zygote 
 3 zygotene 
 3 zygotic 
 2 zymase 
 3 zymosis 
 3 zymotic 
-3 zymurgy 
-0
-Total number of syllables = 208606
-Syllable Counter is a simple and free online tool that can be used for counting the total number of syllables in a word or sentence. You may find this useful in checking syllables while writing poems, haiku etc or use this as a tool to assist in learning or teaching English grammar and syllables.
-
-How does it calculate syllables ?
-Initially It was completely based on a simple algorithm to calculate the total number of syllables, however it was not very accurate. Now, I use the algorithm in combination with a syllable dictionary. It’s still not entirely accurate but the accuracy is gradually improving. If you notice any miscalculation of syllables, please let me know. You should enter the sentences line by line, to display syllable count for each line as well.
-
-Update! Now you can see the syllables divided for each word in every line on the result page. If you see any calculation errors please let me know.
-
-Recent Articles
-Tips on How to Write an Essay
-One Syllable Words
-Two Syllable Words
-Three Syllable Words
-Four Syllable Words
-Update: If you’re a regular user of this site, you may have noticed some changes in overall design and some additional features, feel free to send me any feedback or report any errors.
-
-© 2024 SyllableCounter.net Word Counter Privacy Contact
