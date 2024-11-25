@@ -118,7 +118,7 @@ Ensure the compiled JAR files are located in the /libs folder of the kigo projec
 Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
 
 ### License
-This project is licesed under the MIT license. Please view the LICENSE file for details.
+This project is licensed under the MIT license. Please view the LICENSE file for details.
 
 ### Credits
 - [Spotify API](https://developer.spotify.com/)
