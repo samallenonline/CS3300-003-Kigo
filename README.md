@@ -105,10 +105,6 @@ After these steps, you will be able to run the kigo-app locally on your machine.
 
 Ensure all dependencies are installed (npm install) and that the Node.js server is running (node index.js).
 
-- **Maven build issues:**
-
-Check that Maven is installed and try running mvn clean package again.
-
 - **Spotify authentication issues:**
   
 Ensure the Spotify Developer app's Redirect URI is set to:
