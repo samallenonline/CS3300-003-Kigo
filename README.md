@@ -1,8 +1,98 @@
-# Kigo - Lyric-Driven Haiku Generator
+# Kigo Developer Documentation
 
-Kigo is a web app that generates haikus using lyrics from the user's most-listened songs. This is achieved by utilizing several APIs to pull the user's listening history, identify the user's most-listened songs, and then retrieve lyrics from these songs. Our algorithms count the syllables and parse these lyrics to create personalized, randomly-generated haikus. 
+## Overview
 
-## Getting Started
+Kigo is a web application that generates personalized haikus using lyrics from a user's most-listened songs. It integrates React for the front end, Node.js for the backend, and Java libraries compiled into JAR files for processing logic. This documentation provides an overview of the app's architecture, key components, and guidance for future developers to maintain or extend the application.
+
+## Architecture Overview
+
+Kigo follows a modular architecture with the following components:
+
+1. **Frontend (React)**
+
+Framework: React.js
+
+Purpose: User interface and interaction.
+
+Key Features:
+- Spotify authentication flow.
+- Haiku generation interface.
+- Dynamic rendering of user-specific data.
+
+2. **Backend (Node.js)**
+
+Framework: Express.js
+
+Purpose: API integration and coordination between the frontend and backend.
+
+Key Features:
+- Serves the React app.
+- Handles routes like /login, /callback, and /generate-haiku.
+- Executes Java JAR files for Spotify data retrieval and haiku generation.
+
+3. **Java Libraries (JAR Files)**
+
+Purpose: Core processing logic.
+
+Components:
+- Spotify API integration for retrieving top tracks.
+- Lyrics fetching and processing.
+- Haiku generation algorithms using syllable counting logic.
+
+## Key Components
+
+1. **Frontend**
+
+Location: kigo/src
+
+Key Files:
+- App.js: Manages routing and overall layout.
+- Index.js: Initializes the React app.
+- Account.js: Displays user preferences and account information.
+- App.css: Styling for components defined in App.js.
+
+How It Works:
+Upon visiting the app, the user is presented with a home screen prompting Spotify authentication.
+Once authenticated, the frontend communicates with the backend for data retrieval and haiku generation.
+Generated haikus are displayed dynamically.
+
+2. **Backend**
+
+Location: kigo/index.js
+
+Key File:
+- index.js: Defines backend routes and communicates with the Java libraries.
+
+Routes:
+- /login: Redirects the user to Spotify’s authentication page.
+- /callback: Handles the redirect after Spotify authentication and processes the access token.
+- /generate-haiku: Invokes the haiku generation logic via the Java JAR file.
+
+How It Works:
+The backend uses the Spotify API to retrieve user data and integrates the lyrics.ovh API for lyrics retrieval.
+Java JAR files are executed using Node.js child_process to handle computationally intensive logic.
+
+3. **Java Libraries**
+
+Location: kigokelly and kigonoah
+
+Key Files:
+
+Spotify Authorization and Data Retrieval (kigonoah):
+- AuthorizationCodeUri.java: Generates the Spotify authorization URI.
+- AuthorizationCode.java: Retrieves access tokens after user authentication.
+- UserTopTracks.java: Fetches the user's top tracks using the Spotify API.
+
+Lyric Processing and Haiku Generation (kigokelly):
+- SyllableCounter.java: Counts syllables in song lyrics.
+- ProcessLyricLines.java: Cleans and formats lyrics for haiku generation.
+- HaikuFinder.java: Selects and combines lines to form haikus.
+
+How It Works:
+The Java libraries handle Spotify authentication, data processing, and haiku generation.
+These libraries are compiled into JAR files, which the backend executes during runtime.
+
+## Development Workflow
 
 ### Prerequisites
 
@@ -38,7 +128,7 @@ After installation, verify it by running:
 java -version
 ```
 
-4. **Other requirements**
+**Other requirements**
 
 - A Spotify Developer Account with a client ID and client secret
 
@@ -99,7 +189,38 @@ This will start the Node.js backend at `http://localhost:3000`.
 
 After these steps, you will be able to run the kigo-app locally on your machine. Please reference the user manual if you need more information on navigating the GUI or using certain functionality. 
 
-### Troubleshooting 
+## Development Tips
+**Frontend:**
+Use the React Developer Tools browser extension for debugging.
+Make changes to components in src and use npm start to view updates in real time.
+
+**Backend:**
+Test API routes individually using your terminal.
+Debug issues by adding logs in index.js.
+
+**Java Libraries:**
+Use an IDE such as Eclipse for better project management.
+Write and run unit tests for new classes before integrating them into the JAR files.
+
+## Guidance for Future Developers
+
+**Extending Frontend Functionality:**
+Add new pages or features by creating components in src.
+Follow the routing structure defined in App.js for navigation.
+
+**Adding New APIs:**
+Define new backend routes in index.js and use the child_process module to integrate with external APIs or JAR files.
+Ensure that error handling is implemented for API calls.
+
+**Improving Lyric Processing:**
+Enhance the SyllableCounter algorithm in kigokelly for better accuracy.
+Add tests for edge cases in testingSyllableCounter.java.
+
+**Implementing Error Handling:**
+Add detailed error messages for scenarios where APIs fail to return data.
+Ensure that the frontend displays meaningful feedback to users during errors.
+
+## Troubleshooting 
 
 - **Node.js or backend issues:**
 
@@ -114,11 +235,12 @@ http://localhost:3000/callback.
   
 Ensure the compiled JAR files are located in the /libs folder of the kigo project.
 
-### Contributing 
+## Contributing 
 Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
 
-### License
+## License
 This project is licensed under the MIT license. Please view the LICENSE file for details.
 
-### Credits
+## Credits
 - [Spotify API](https://developer.spotify.com/)
+- [lyrics.ovh API](https://lyricsovh.docs.apiary.io/#)
