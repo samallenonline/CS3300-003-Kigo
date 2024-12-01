@@ -9,6 +9,21 @@ public class LyricsOvhFetcher {
     private static final String API_URL = "https://api.lyrics.ovh/v1/";
 
 
+    /*
+     * Author: Noah Kabel
+     * 
+     * This method retrieved the lyrics for a given song using lyrics.ovh API.
+     * 
+     * Uses
+     * 
+     * Parameters:
+     * - songTitle: Name of a song
+     * - artistName: Artist of the song
+     * 
+     * Returns:
+     * - A string representation of the lyrics to a song.
+     * 
+     */
     public static String getLyrics(String songTitle, String artistName) throws Exception {
         OkHttpClient client = new OkHttpClient();
         String url = API_URL + artistName + "/" + songTitle;
