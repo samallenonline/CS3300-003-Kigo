@@ -12,27 +12,28 @@ Kigo follows a modular architecture with the following components:
 
 Framework: React.js
 
-Purpose: User interface and interaction.
+Purpose: Provides a visually appealing and interactive user interface for the app, allowing users to navigate the app, authenticate with Spotify, and view personalized haikus.
 
 Key Features:
-- Spotify authentication flow.
-- Haiku generation interface.
+- GUI that ensures a user-friendly experience for navigating the app's functionality.  
+- Spotify authentication and haiku generation flow.
 - Dynamic rendering of user-specific data.
+- Account preferences stored in local data.
 
 2. **Backend (Node.js)**
 
 Framework: Express.js
 
-Purpose: API integration and coordination between the frontend and backend.
+Purpose: Acts as a middle man by managing communication between the frontend and backend and ensuring seamless functionality across all components. 
 
 Key Features:
 - Serves the React app.
-- Handles routes like /login, /callback, and /generate-haiku.
-- Executes Java JAR files for Spotify data retrieval and haiku generation.
+- Manages routes such as /login, /callback, and /generate-haiku.
+- Executes Java JAR files to complete various tasks such as retrieving Spotify data, fetching song lyrics, processing these lyrics, and generating personalized haikus. 
 
 3. **Java Libraries (JAR Files)**
 
-Purpose: Core processing logic.
+Purpose: Provides the core logic for the app, implemented through modular and resuable Java components. 
 
 Components:
 - Spotify API integration for retrieving top tracks.
@@ -51,10 +52,8 @@ Key Files:
 - Account.js: Displays user preferences and account information.
 - App.css: Styling for components defined in App.js.
 
-How It Works:
-Upon visiting the app, the user is presented with a home screen prompting Spotify authentication.
-Once authenticated, the frontend communicates with the backend for data retrieval and haiku generation.
-Generated haikus are displayed dynamically.
+How It Works: 
+Upon visiting the app, the user is presented with a home screen prompting Spotify authentication. Once authenticated, the frontend communicates with the backend for data retrieval and haiku generation. Generated haikus are displayed dynamically.
 
 2. **Backend**
 
@@ -64,13 +63,15 @@ Key File:
 - index.js: Defines backend routes and communicates with the Java libraries.
 
 Routes:
+- /: Root route, displays a welcome message. Offers no functionality and is used for testing purposes only.  
 - /login: Redirects the user to Spotify’s authentication page.
 - /callback: Handles the redirect after Spotify authentication and processes the access token.
-- /generate-haiku: Invokes the haiku generation logic via the Java JAR file.
-
+- /fetch-lyrics: Retrieves lyrics from the user's top tracks via the kigonoah JAR file.
+- /generate-haiku: Invokes the haiku generation logic via the kigokelly JAR file.
+- /get-haiku: Retrieves all haikus contained in the /haiku folder and prepares them to be displayed on the user interface. 
+  
 How It Works:
-The backend uses the Spotify API to retrieve user data and integrates the lyrics.ovh API for lyrics retrieval.
-Java JAR files are executed using Node.js child_process to handle computationally intensive logic.
+The backend uses the Spotify API to retrieve user data and integrates the lyrics.ovh API for lyrics retrieval. Java JAR files are executed using Node.js child_process to handle various processing and logic. 
 
 3. **Java Libraries**
 
@@ -79,14 +80,17 @@ Location: kigokelly and kigonoah
 Key Files:
 
 Spotify Authorization and Data Retrieval (kigonoah):
+- AuthorizationCode.java: Exchanges the authorization code for an access token.
 - AuthorizationCodeUri.java: Generates the Spotify authorization URI.
-- AuthorizationCode.java: Retrieves access tokens after user authentication.
+- CompileLyrics.java: Coordinates the process of fetching relevant user data, retrieving lyrics for the user's top tracks, and storing them as text files in the /lyrics folder. 
+- LyricsOvhFetcher.java: Fetches song lyrics using the lyrics.ovh API.
 - UserTopTracks.java: Fetches the user's top tracks using the Spotify API.
 
 Lyric Processing and Haiku Generation (kigokelly):
-- SyllableCounter.java: Counts syllables in song lyrics.
-- ProcessLyricLines.java: Cleans and formats lyrics for haiku generation.
-- HaikuFinder.java: Selects and combines lines to form haikus.
+- SyllableCounter1.java: Counts the number of syllables in a given word.
+- ProcessLyricLines.java: Cleans and processes raw song lyrics.
+- HaikuFinder.java: Finds and generates haikus from processed song lyrics. 
+- RemoveDuplicateLines.java: Further processes lyrics by removing duplicate lines.
 
 How It Works:
 The Java libraries handle Spotify authentication, data processing, and haiku generation.
