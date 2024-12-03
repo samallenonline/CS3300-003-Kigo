@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Map;
+import java.util.HashMap;
+import com.kigo.processLyricLines;
+import com.kigo.removeDuplicateLines;
+
 import java.util.Iterator;
 import java.io.FileWriter;
 
@@ -52,6 +57,10 @@ public class HaikuFinder {
         	
         	File file = lyricFile;	
 			Scanner scanner = new Scanner(file);
+			
+			// Grab the first two lines storing Title and Artist for printing signature
+			String title = scanner.nextLine();
+			String artist = scanner.nextLine();
 	
 			// ArrayLists to store Strings of lyric lines
 			ArrayList<String> fileLines = new ArrayList<>();
@@ -66,65 +75,70 @@ public class HaikuFinder {
 			// Call various methods to process the lyrics
 			ArrayList<String> nonDuplicateLyrics = removeDuplicateLines.main(fileLines);
 			ArrayList<String> polishedLyrics = processLyricLines.main(nonDuplicateLyrics);
+
 			ArrayList<String> thisLineList = new ArrayList<>();
-			ArrayList<String> sevenSyllableLines = new ArrayList<>();
+			ArrayList<String> fourSyllableLines = new ArrayList<>();
 			ArrayList<String> fiveSyllableLines = new ArrayList<>();
-	
-			int lineCount = 0;
-			int fiveSyllableLineCount = 0;
-			int sevenSyllableLineCount = 0;
-	
+			ArrayList<String> sixSyllableLines = new ArrayList<>();
+			ArrayList<String> sevenSyllableLines = new ArrayList<>();
+			ArrayList<String> eightSyllableLines = new ArrayList<>();
+			ArrayList<String> otherCountLines = new ArrayList<>();
+
+			int lineSyllableCount = 0;
+
 			int numLines = polishedLyrics.size();
 			String currentLine = "";
-			
+
 			// Walks through words in a file checking for presence of a haiku.
-			for (int i = 0; i < numLines; i++ ) {
-	
+			for (int i = 0; i < numLines; i++) {
+
 				// Clear the ArrayList for each new line
 				thisLineList.clear();
-	
+
 				// Get next word in the file
 				currentLine = polishedLyrics.get(i);
-	
+
 				// Split the current line into words by whitespace
 				String[] words = currentLine.split("\\s+");
-	
-				// Add each word from the line into the an ArrayList for easy individual 
+
+				// Add each word from the line into the an ArrayList for easy individual
 				// processing if syllable count need to be slightly altered.
 				for (String word : words) {
 					thisLineList.add(word);
 				}
-	
+
 				// Count syllables
-				lineCount = countSyllablesInLine(thisLineList);
-				
-	
-				// If lineCount == 4
-				if (lineCount == 4) {
-	
-					// Call addOneSyllable on thisLineArrayList to expand conjunctions
-					thisLineList = addOneSyllable(thisLineList);
+				lineSyllableCount = countSyllablesInLine(thisLineList);
+
+				////////////// COUNT NEAR SYLLABLE MARK LINES AND MOVE INTO RESPECTIVE LISTS
+				////////////// /////////////
+				if (lineSyllableCount == 4) {
+					fourSyllableLines.add(currentLine);
+					// Call addOneSyllable to try to expand conjunctions
+					// thisLineList = addOneSyllable(thisLineList);
 				}
 				// If line matches requirements to be a haiku line,
-				else if (lineCount == 5) {
+				else if (lineSyllableCount == 5) {
 					// Add to Arraylist & store for later use.
-					if (!fiveSyllableLines.contains(currentLine)) {
-						fiveSyllableLines.add(currentLine);
-						fiveSyllableLineCount++;
-					}
-				} else if (lineCount == 7) {
-					if (!sevenSyllableLines.contains(currentLine)) {
-						sevenSyllableLines.add(currentLine);
-						sevenSyllableLineCount++;
+					fiveSyllableLines.add(currentLine);
+				} else if (lineSyllableCount == 6) {
+					sixSyllableLines.add(currentLine);
+				} else if (lineSyllableCount == 7) {
+					sevenSyllableLines.add(currentLine);
+				} else if (lineSyllableCount == 8) {
+					eightSyllableLines.add(currentLine);
+				} else {
+					if (lineSyllableCount >= 9) {
+						otherCountLines.add(currentLine);
 					}
 				}
+
 				// If count = 8 and the first word is "and"
-				else if (lineCount == 8 && words[0].toLowerCase().equals("and")) {
+				if (lineSyllableCount == 8 && words[0].toLowerCase().equals("and")) {
 					// Remove the word "and" to reach 7 syllables and increase # usable lines
-	
+
 					String modifiedLine = removeWordFromLine(thisLineList, "and");
-					// System.out.println("Modified line: " + modifiedLine);
-	
+
 					// Recalculate syllables
 					int newSyllableCount = countSyllablesInLine(thisLineList);
 					if ((newSyllableCount == 7) && (!sevenSyllableLines.contains(modifiedLine))) {
@@ -132,10 +146,10 @@ public class HaikuFinder {
 					}
 				}
 				// If count = 8 and line conatins the word "of"
-				else if ((lineCount == 8) && (currentLine.contains("the"))) {
-					// Remove "of" to fit 7 syllables
+				else if ((lineSyllableCount == 8) && (currentLine.contains("the"))) {
+					// Remove "the" to fit 7 syllables
 					String modifiedLine = removeWordFromLine(thisLineList, "the");
-	
+
 					// Recalculate syllables
 					int newSyllableCount = countSyllablesInLine(thisLineList);
 					if ((newSyllableCount == 7) && (!sevenSyllableLines.contains(modifiedLine))) {
@@ -143,13 +157,36 @@ public class HaikuFinder {
 					}
 				} // end if else-if
 			} // end while
-	
+
+			// Check how many 4, 5, 6, and 7 syllable lines we have to work with
+			int numFourSyllableLines = fourSyllableLines.size();
+			int numFiveSyllableLines = fiveSyllableLines.size();
+			int numSixSyllableLines = sixSyllableLines.size();
+			int numSevenSyllableLines = sevenSyllableLines.size();
+
+			System.out.println("\n");
+			System.out.println("Contents of 4 Syllable ArrayList:");
+			printArrayList(fourSyllableLines);
 			System.out.println("\n");
 			System.out.println("Contents of 5 Syllable ArrayList:");
 			printArrayList(fiveSyllableLines);
 			System.out.println("");
+			System.out.println("Contents of 6 Syllable ArrayList:");
+			printArrayList(sixSyllableLines);
+			System.out.println("");
 			System.out.println("Contents of 7 Syllable ArrayList:");
 			printArrayList(sevenSyllableLines);
+
+			splitLinesByCommas(otherCountLines, fourSyllableLines, fiveSyllableLines, sixSyllableLines, sevenSyllableLines);
+
+			boolean foundMoreFiveLines = false;
+			// If 5-Syll lines <= 1, try to make more from fourSyllableLines
+			//if (numFourSyllableLines >= 1 && numFiveSyllableLines <= 1) {
+				foundMoreFiveLines = makeFiveSyllableLinesFromFour(fourSyllableLines, fiveSyllableLines);
+			//}
+			//if (!foundMoreFiveLines) {
+				makeFiveSyllableLinesFromSix(fiveSyllableLines, sixSyllableLines);
+			//}
 	
             // generate haikus
             StringBuilder haikuContent = new StringBuilder();
@@ -161,13 +198,44 @@ public class HaikuFinder {
             // save haikus to file in /haikus folder
             String haikuFileName = HAIKUS_FOLDER + "/" + lyricFile.getName().replace(".txt", "_haikus.txt");
             try (FileWriter writer = new FileWriter(haikuFileName)) {
-                writer.write(haikuContent.toString());
+                writer.write(haikuContent.toString() + "\n");
+                writer.write("Lyrics - " + artist);
+                
             }
 	
 			
 		} // end main
-	}
+	} // end 
 	
+	private static void splitLinesByCommas(ArrayList<String> otherLines, ArrayList<String> fourLines,
+			ArrayList<String> fiveLines, ArrayList<String> sixLines, ArrayList<String> sevenLines) {
+		// ArrayList<String> result = new ArrayList<>();
+
+		for (String line : otherLines) {
+			// Split the line by commas
+			String[] subLines = line.split(",");
+
+			for (String subLine : subLines) {
+				subLine = subLine.trim(); // Remove leading/trailing spaces
+
+				// Count syllables in the sub-line
+				int syllableCount = countSyllablesInLine(subLine);
+
+				// Check if the syllable count matches the desired range
+				if (syllableCount == 4) {
+					fourLines.add(subLine);
+				} else if (syllableCount == 5) {
+					fiveLines.add(subLine);
+				} else if (syllableCount == 6) {
+					sixLines.add(subLine);
+				} else if (syllableCount == 5) {
+					sevenLines.add(subLine);
+				}
+			}
+		}
+
+		// return result;
+	}
 	public static void printHaikuStringArray(String[] haiku) {
 		System.out.println("\n" + haiku[0]);
 		System.out.println(haiku[1]);
@@ -197,136 +265,163 @@ public class HaikuFinder {
 		return haiku;
 	} // end putTogetherHaiku
 
-	private static ArrayList<String> addOneSyllable(ArrayList<String> list) {
-		// Use an iterator to find potential words to extend
-		Iterator<String> iterator = list.iterator();
-		ArrayList<String> updatedList = new ArrayList<>();
+	private static String expandContraction(String word) {
+		// Define a map for expanding contractions to increase syllables
+		Map<String, String[]> expansionsMap = new HashMap<>();
 
-		while (iterator.hasNext()) {
-			String word = iterator.next();
+		expansionsMap.put("i'm", new String[] { "I", "am" });
+		expansionsMap.put("you're", new String[] { "you", "are" });
+		expansionsMap.put("we're", new String[] { "we", "are" });
+		expansionsMap.put("they're", new String[] { "they", "are" });
+		expansionsMap.put("he's", new String[] { "he", "is" });
+		expansionsMap.put("she's", new String[] { "she", "is" });
+		expansionsMap.put("it's", new String[] { "it", "is" });
+		expansionsMap.put("i've", new String[] { "I", "have" });
+		expansionsMap.put("you've", new String[] { "you", "have" });
+		expansionsMap.put("we've", new String[] { "we", "have" });
+		expansionsMap.put("they've", new String[] { "they", "have" });
+		expansionsMap.put("don't", new String[] { "do", "not" });
+		expansionsMap.put("doesn't", new String[] { "does", "not" });
+		expansionsMap.put("didn't", new String[] { "did", "not" });
+		expansionsMap.put("i'll", new String[] { "I", "will" });
+		expansionsMap.put("you'll", new String[] { "you", "will" });
+		expansionsMap.put("we'll", new String[] { "we", "will" });
+		expansionsMap.put("they'll", new String[] { "they", "will" });
+		expansionsMap.put("i'd", new String[] { "I", "would" });
+		expansionsMap.put("you'd", new String[] { "you", "would" });
+		expansionsMap.put("he'd", new String[] { "he", "would" });
+		expansionsMap.put("she'd", new String[] { "she", "would" });
+		expansionsMap.put("they'd", new String[] { "they", "would" });
+		expansionsMap.put("gonna", new String[] { "going", "to" });
+		expansionsMap.put("wanna", new String[] { "want", "to" });
+		expansionsMap.put("lemme", new String[] { "let", "me" });
+		expansionsMap.put("gimme", new String[] { "give", "me" });
+		expansionsMap.put("y'all", new String[] { "you", "all" });
 
-			switch (word.toLowerCase()) { // Convert to lowercase for case-insensitive matching
-			case "i'm":
-				updatedList.add("I");
-				updatedList.add("am");
-				break;
-			case "you're":
-				updatedList.add("you");
-				updatedList.add("are");
-				break;
-			case "we're":
-				updatedList.add("we");
-				updatedList.add("are");
-				break;
-			case "they're":
-				updatedList.add("they");
-				updatedList.add("are");
-				break;
-			case "he's":
-				updatedList.add("he");
-				updatedList.add("is");
-				break;
-			case "she's":
-				updatedList.add("she");
-				updatedList.add("is");
-				break;
-			case "it's":
-				updatedList.add("it");
-				updatedList.add("is");
-				break;
-			case "i've":
-				updatedList.add("I");
-				updatedList.add("have");
-				break;
-			case "you've":
-				updatedList.add("you");
-				updatedList.add("have");
-				break;
-			case "we've":
-				updatedList.add("we");
-				updatedList.add("have");
-				break;
-			case "they've":
-				updatedList.add("they");
-				updatedList.add("have");
-				break;
-			case "don't":
-				updatedList.add("do");
-				updatedList.add("not");
-				break;
-			case "doesn't":
-				updatedList.add("does");
-				updatedList.add("not");
-				break;
-			case "didn't":
-				updatedList.add("did");
-				updatedList.add("not");
-				break;
-			case "i'll":
-				updatedList.add("I");
-				updatedList.add("will");
-				break;
-			case "you'll":
-				updatedList.add("you");
-				updatedList.add("will");
-				break;
-			case "we'll":
-				updatedList.add("we");
-				updatedList.add("will");
-				break;
-			case "they'll":
-				updatedList.add("they");
-				updatedList.add("will");
-				break;
-			case "i'd":
-				updatedList.add("I");
-				updatedList.add("would"); // Default to "would" but can adjust based on context
-				break;
-			case "you'd":
-				updatedList.add("you");
-				updatedList.add("would");
-				break;
-			case "he'd":
-				updatedList.add("he");
-				updatedList.add("would");
-				break;
-			case "she'd":
-				updatedList.add("she");
-				updatedList.add("would");
-				break;
-			case "they'd":
-				updatedList.add("they");
-				updatedList.add("would");
-				break;
-			case "gonna":
-				updatedList.add("going");
-				updatedList.add("to");
-				break;
-			case "wanna":
-				updatedList.add("want");
-				updatedList.add("to");
-				break;
-			case "lemme":
-				updatedList.add("let");
-				updatedList.add("me");
-				break;
-			case "gimme":
-				updatedList.add("give");
-				updatedList.add("me");
-				break;
-			case "y'all":
-				updatedList.add("you");
-				updatedList.add("all");
-				break;
-			default:
-				// If no match, add the word as is
-				updatedList.add(word);
-				break;
-			}
-		} // end while iterator
+		// Convert input to lowercase for case-insensitive matching
+		String lowerCaseWord = word.toLowerCase();
 
-		return updatedList;
+		// Check if the word exists in the expansions map
+		if (expansionsMap.containsKey(lowerCaseWord)) {
+			// Join the expanded parts into a single string
+			return String.join(" ", expansionsMap.get(lowerCaseWord));
+		}
+
+		// If no expansion is found, return the original word
+		return word;
+
 	} // end tryToAddOneSyllable
+
+	private static boolean makeFiveSyllableLinesFromSix(ArrayList<String> fiveList, ArrayList<String> sixList) {
+
+		boolean addedOne = false;
+
+		// For every 4-syllable line in the array list
+		for (int i = 0; i < sixList.size(); i++) {
+
+			// Pull out each line as a string
+			String line = sixList.get(i);
+			// Convert it to a string array
+			String[] words = line.split("\\s+");
+
+			StringBuilder updatedLine = new StringBuilder();
+			boolean lineUpdated = false;
+
+			// Check each word in the line
+			for (String word : words) {
+				// Try to expand contractions
+				String updated = makeContraction(word);
+				if (!word.equals(updated)) {
+					lineUpdated = true;
+				}
+				// Add the (possibly updated) word to the new line
+				updatedLine.append(updated).append(" ");
+			}
+
+			// If at least one word was updated, add the new line to fiveList
+			if (lineUpdated) {
+				fiveList.add(updatedLine.toString().trim());
+				addedOne = true;
+			}
+		} // end outer loop
+
+		return addedOne;
+	} // end makeFiveSyllableLinesFromFour
+
+	private static boolean makeFiveSyllableLinesFromFour(ArrayList<String> fourList, ArrayList<String> fiveList) {
+
+		boolean addedOne = false;
+
+		// For every 4-syllable line in the array list
+		for (int i = 0; i < fourList.size(); i++) {
+
+			// Pull out each line as a string
+			String line = fourList.get(i);
+			// Convert it to a string array
+			String[] words = line.split("\\s+");
+
+			StringBuilder updatedLine = new StringBuilder();
+			boolean lineUpdated = false;
+
+			// Check each word in the line
+			for (String word : words) {
+				// Try to expand contractions
+				String updated = expandContraction(word);
+				if (!word.equals(updated)) {
+					lineUpdated = true;
+				}
+				// Add the (possibly updated) word to the new line
+				updatedLine.append(updated).append(" ");
+			}
+
+			// If at least one word was updated, add the new line to fiveList
+			if (lineUpdated) {
+				fiveList.add(updatedLine.toString().trim());
+				addedOne = true;
+			}
+		} // end outer loop
+
+		return addedOne;
+	} // end makeFiveSyllableLinesFromFour
+
+	private static String makeContraction(String word) {
+
+		// Define a map for collapsing phrases to reduce syllables
+		Map<String, String> contractionsMap = new HashMap<>();
+
+		contractionsMap.put("i am", "I'm");
+		contractionsMap.put("you are", "you're");
+		contractionsMap.put("we are", "we're");
+		contractionsMap.put("they are", "they're");
+		contractionsMap.put("he is", "he's");
+		contractionsMap.put("she is", "she's");
+		contractionsMap.put("do not", "don't");
+		contractionsMap.put("does not", "doesn't");
+		contractionsMap.put("did not", "didn't");
+		contractionsMap.put("i will", "I'll");
+		contractionsMap.put("you will", "you'll");
+		contractionsMap.put("we will", "we'll");
+		contractionsMap.put("they will", "they'll");
+		contractionsMap.put("he will", "he'll");
+		contractionsMap.put("she will", "she'll");
+		contractionsMap.put("i would", "I'd");
+		contractionsMap.put("you would", "you'd");
+		contractionsMap.put("he would", "he'd");
+		contractionsMap.put("she would", "she'd");
+		contractionsMap.put("they would", "they'd");
+
+		// Convert input to lowercase for case-insensitive matching
+		String lowerCaseWord = word.toLowerCase();
+
+		// Check if the word exists in the expansions map
+		if (contractionsMap.containsKey(lowerCaseWord)) {
+			// Join the expanded parts into a single string
+			return String.join(" ", contractionsMap.get(lowerCaseWord));
+		}
+
+		// If no expansion is found, return the original word
+		return word;
+	}
 
 	private static String removeWordFromLine(ArrayList<String> thisLine, String wordToRemove) {
 		// Use an iterator to safely remove the word while iterating
@@ -365,11 +460,21 @@ public class HaikuFinder {
 		System.out.println("-----------------");
 	}
 
-	private static int countWordsInLine(String line) {
-		int wordCount = 0;
+	private static int countSyllablesInLine(String line) {
 
-		return wordCount;
-	} // end findLineWordCount
+		int syllablesInLine = 0;
+
+		// Split the line into words
+		String[] words = line.split("\\s+");
+
+		// Loop through the words and process them
+		for (String word : words) {
+			// Update syllable count with current word's count
+			syllablesInLine += SyllableCounter1.countSyllables(word);
+		}
+		return syllablesInLine;
+
+	} // end countSyllablesInLine
 
 	private static int countSyllablesInLine(ArrayList<String> thisLine) {
 
