@@ -136,6 +136,10 @@ java -version
 
 - A Spotify Developer Account with a client ID and client secret
 
+### Note to TA/grader
+- Our Spotify Web app is currently in the development stage, meaning that only users that are added to the authorized users list can access the app. For an easier local setup, the Kigo Team can add you to this list so that you do not have to create a Spotify Developer Account and are able to utilize the .env file provided. If you have not been added to this list, please contact pulsar3k@gmail.com.
+- Once you have been added to the list, please ignore all instructions relating to setting up a Spotify Developer Account and .env file.
+
 ### Installation
 1. Clone only the "kigo-source" branch of this repository (using bash or GitHub Desktop):
 
