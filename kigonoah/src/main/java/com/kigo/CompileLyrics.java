@@ -19,7 +19,7 @@ import java.util.List;
 public class CompileLyrics {
 
     // define where lyric files will be outputted
-    private static final String LYRICS_FOLDER = "lyrics/";
+    private static final String LYRICS_FOLDER = "../kigonoah/lyrics";
 
     public static void main(String[] args) {
         if (args.length == 0) {
