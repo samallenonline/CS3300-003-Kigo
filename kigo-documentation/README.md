@@ -4,6 +4,37 @@
 
 Kigo is a web application that generates personalized haikus using lyrics from a user's most-listened songs. It integrates React for the front end, Node.js for the backend, and Java libraries compiled into JAR files for processing logic. This documentation provides an overview of the app's architecture, key components, and guidance for future developers to maintain or extend the application.
 
+## Code Convention Details 
+
+### Primary Languages:
+
+- **Java:** 
+Used for backend logic in the JAR libraries.
+
+- **JavaScript:** 
+Used for the Node.js backend and React frontend.
+
+- **HTML and CSS:** 
+Used for frontend design and user interface styling.
+
+### Compilers:
+
+- **Java Compiler (Maven):** For compiling the Java libraries into JAR files.
+
+- **Node.js Runtime Environment:** Executes the backend and serves the frontend application.
+
+### Configuration Management:
+
+- **Spotify Integration:** The Spotify Web API was implemented first to handle client IDs, secrets, and authorization tokens.
+
+- **Lyric Fetching:** The lyrics.ovh API was integrated to retrieve lyrics for the user's top tracks.
+
+- **Syllable Counting Algorithm:** Parallelly, the algorithm to process lyrics and count syllables for haiku generation was developed.
+
+- **Frontend and Backend Integration:** The React frontend and Node.js backend were built and connected to the JAR files for processing logic.
+
+- **Testing and Deployment:** Final integration and testing ensured adequate operation before deploying the app.
+
 ## Architecture Overview
 
 Kigo follows a modular architecture with the following components:
@@ -210,6 +241,26 @@ Debug issues by adding logs in index.js.
 Use an IDE such as Eclipse for better project management.
 Write and run unit tests for new classes before integrating them into the JAR files.
 
+## Current Limitations 
+
+- **Dependency on External APIs**
+
+The Kigo app relies heavily on the Spotify API for user data and the lyrics.ovh API for lyric retrieval. If these APIs experience downtime, rate limiting, or unexpected changes, core functionalities like haiku generation may fail. Additionally, Lyrics.ovh contains a limited database of lyrics and often does not provide lyrics for lesser-known tracks. 
+
+- **Limited Compatibility with Streaming Platforms**
+
+This software is only compatible with the music streaming service Spotify. Users who use other streaming services like Pandora, Apple Music, Soundcloud, or YouTube Music will not be able to use the software.
+
+- **Error Handling**
+
+Basic error handling and debugging logs are implemented, which facilitate development. However, user-facing error messages are limited and could be improved to better communicate issues, such as missing data, API failures, or unexpected inputs.
+
+- **Missing feature implementation**
+
+Some planned features (though non-essential), such as the haiku gallery and additional user preferences are not yet implemented.
+
+Overall, the software operates adequately and meets most user expectations by achieving essential functionality. 
+
 ## Guidance for Future Developers
 
 **Extending Frontend Functionality:**
@@ -247,7 +298,7 @@ Ensure the compiled JAR files are located in the /libs folder of the kigo projec
 Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
 
 ## License
-This project is licensed under the MIT license. Please view the LICENSE file for details.
+The Kigo App is licensed under the MIT license. This means that anyone is free to view, modify, and distribute the source code with minimal restrictions, as long as the original copyright and permission notice are included in all copies or substantial portions of the software. Please view the LICENSE file for more details.
 
 ## Credits
 - [Spotify API](https://developer.spotify.com/)
