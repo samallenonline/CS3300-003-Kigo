@@ -35,6 +35,21 @@ Used for frontend design and user interface styling.
 
 - **Testing and Deployment:** Final integration and testing ensured adequate operation before deploying the app.
 
+### Comments and Logic:
+
+**Code Comments:**
+
+- Effective comments are consistently present across the codebase and offer insight into the purpose of key methods, functions, and components.
+- Backend and frontend files include comments explaining core logic, such as route handling and component functionality, to ensure clarity for future developers.
+
+### Logic Structure:
+
+The codebase adheres to modular design principles:
+
+- Each Java class encapsulates a specific functionality (ex. Spotify data retrieval, lyric processing).
+- Node.js handles API requests as separate routes, ensuring a clean and scalable structure.
+- React components follow a logical hierarchy, with state management for user data and dynamic rendering for haikus.
+
 ## Architecture Overview
 
 Kigo follows a modular architecture with the following components:
@@ -230,32 +245,33 @@ After these steps, you will be able to run the kigo-app locally on your machine.
 
 ## Development Tips
 **Frontend:**
-Use the React Developer Tools browser extension for debugging.
-Make changes to components in src and use npm start to view updates in real time.
+- Use the React Developer Tools browser extension for debugging.
+- Make changes to components in src and use npm start to view updates in real time.
 
 **Backend:**
-Test API routes individually using your terminal.
-Debug issues by adding logs in index.js.
+- Test API routes individually using your terminal.
+- Debug issues by adding logs in index.js.
 
 **Java Libraries:**
-Use an IDE such as Eclipse for better project management.
-Write and run unit tests for new classes before integrating them into the JAR files.
+- Use an IDE such as Eclipse for better project management.
+- When working with the kigokelly and kigonoah libraries, ensure you create or import them as Maven projects.
+- Write and run unit tests for new classes before integrating them into the JAR files.
 
 ## Current Limitations 
 
-- **Dependency on External APIs**
+1. **Dependency on External APIs**
 
 The Kigo app relies heavily on the Spotify API for user data and the lyrics.ovh API for lyric retrieval. If these APIs experience downtime, rate limiting, or unexpected changes, core functionalities like haiku generation may fail. Additionally, Lyrics.ovh contains a limited database of lyrics and often does not provide lyrics for lesser-known tracks. 
 
-- **Limited Compatibility with Streaming Platforms**
+2. **Limited Compatibility with Streaming Platforms**
 
 This software is only compatible with the music streaming service Spotify. Users who use other streaming services like Pandora, Apple Music, Soundcloud, or YouTube Music will not be able to use the software.
 
-- **Error Handling**
+3. **Error Handling**
 
 Basic error handling and debugging logs are implemented, which facilitate development. However, user-facing error messages are limited and could be improved to better communicate issues, such as missing data, API failures, or unexpected inputs.
 
-- **Missing feature implementation**
+4. **Missing feature implementation**
 
 Some planned features (though non-essential), such as the haiku gallery and additional user preferences are not yet implemented.
 
@@ -264,35 +280,36 @@ Overall, the software operates adequately and meets most user expectations by ac
 ## Guidance for Future Developers
 
 **Extending Frontend Functionality:**
-Add new pages or features by creating components in src.
-Follow the routing structure defined in App.js for navigation.
+- Add new pages or features by creating components in src.
+- Follow the routing structure defined in App.js for navigation.
 
 **Adding New APIs:**
-Define new backend routes in index.js and use the child_process module to integrate with external APIs or JAR files.
-Ensure that error handling is implemented for API calls.
+- Define new backend routes in index.js and use the child_process module to integrate with external APIs or JAR files.
+- Ensure that error handling is implemented for API calls.
+- Refer to the API documentation to ensure effective implementation and facilitate troubleshooting.
 
 **Improving Lyric Processing:**
-Enhance the SyllableCounter algorithm in kigokelly for better accuracy.
-Add tests for edge cases in testingSyllableCounter.java.
+- Enhance the SyllableCounter algorithm in kigokelly for better accuracy.
+- Add tests for edge cases in testingSyllableCounter.java.
 
 **Implementing Error Handling:**
-Add detailed error messages for scenarios where APIs fail to return data.
-Ensure that the frontend displays meaningful feedback to users during errors.
+- Add detailed error messages for scenarios where APIs fail to return data.
+- Ensure that the frontend displays meaningful feedback to users during errors.
 
 ## Troubleshooting 
 
-- **Node.js or backend issues:**
+**Node.js or backend issues:**
 
-Ensure all dependencies are installed (npm install) and that the Node.js server is running (node index.js).
+- Ensure all dependencies are installed (npm install) and that the Node.js server is running (node index.js).
 
-- **Spotify authentication issues:**
+**Spotify authentication issues:**
   
-Ensure the Spotify Developer app's Redirect URI is set to:
+- Ensure the Spotify Developer app's Redirect URI is set to:
 http://localhost:3000/callback.
 
-- **JAR file not found:**
+**JAR file not found:**
   
-Ensure the compiled JAR files are located in the /libs folder of the kigo project.
+- Ensure the compiled JAR files are located in the /libs folder of the kigo project.
 
 ## Contributing 
 Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
